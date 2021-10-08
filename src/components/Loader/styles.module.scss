@@ -1,0 +1,14 @@
+.loader {
+  animation: spin 0.5s infinite steps(8);
+}
+
+@keyframes spin {
+
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

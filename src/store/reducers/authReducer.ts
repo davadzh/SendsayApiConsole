@@ -1,57 +1,72 @@
-import {Action, handleActions} from 'redux-actions';
+import {handleActions} from 'redux-actions';
 
 import {ActionTypes} from 'src/store/constants';
-import {SendsayLoginPayloadType} from '../actions';
 
-export type AuthStateType = {
-  loading: boolean,
-  sessionKey: string | null,
-  login: string | null,
-  sublogin?: string | null,
-}
+type AuthStateType = {
+  isLoading: boolean;
+  isLoggedIn: boolean;
+  login: string | null;
+  sublogin?: string | null;
+  authErrorMessage?: string | null;
+};
 
-export const initialState: AuthStateType = {
-  loading: false,
-  sessionKey: null,
+type ErrorStateType = {
+  authErrorMessage?: string | null;
+};
+
+//TODO Убрать isLoggedIn из персистора
+const authInitialState: AuthStateType = {
+  isLoading: false,
+  isLoggedIn: false,
   login: null,
   sublogin: null,
+  authErrorMessage: null,
+};
+
+const errorInitialState: ErrorStateType = {
+  authErrorMessage: null,
 };
 
 export default {
   auth: handleActions<AuthStateType>(
     {
-      [ActionTypes.AUTHENTICATE]: (state, {payload}) => {
+      [ActionTypes.LOGIN]: (state) => {
         return {
           ...state,
-          loading: true,
+          isLoading: true,
         };
       },
       [ActionTypes.AUTHENTICATE_SUCCESS]: (state, {payload}) => {
         return {
           ...state,
-          loading: false,
-          sessionKey: payload.sessionKey,
+          isLoading: false,
+          isLoggedIn: true,
           login: payload.login,
           sublogin: payload.sublogin,
         };
       },
-      [ActionTypes.AUTHENTICATE_FAILURE]: (state) => {
+      [ActionTypes.LOGOUT_SUCCESS]: (state) => {
         return {
           ...state,
-          loading: false,
-          sessionKey: null,
+          isLoading: false,
+          isLoggedIn: false,
           login: null,
           sublogin: null,
         };
       },
-      [ActionTypes.LOGOUT]: (state) => {
+    },
+    authInitialState
+  ),
+
+  error: handleActions<ErrorStateType>(
+    {
+      [ActionTypes.AUTHENTICATE_FAILURE]: (state, {payload}) => {
         return {
           ...state,
-          loading: false,
-          sessionKey: null,
+          authErrorMessage: payload.authErrorMessage,
         };
       },
     },
-    initialState
+    errorInitialState
   ),
 };

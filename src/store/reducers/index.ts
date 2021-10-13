@@ -2,9 +2,7 @@ import requestsReducer from 'src/store/reducers/requestsReducer';
 import loginReducer from 'src/store/reducers/authReducer';
 import storage from 'redux-persist/lib/storage';
 import {combineReducers} from 'redux';
-import {persistReducer, persistStore} from 'redux-persist';
-import {RequestsStateType} from './requestsReducer';
-import {AuthStateType} from './authReducer';
+import {persistReducer} from 'redux-persist';
 
 const persistConfig = {
   key: 'root',
@@ -13,6 +11,6 @@ const persistConfig = {
 
 export const rootReducer = combineReducers({
   auth: persistReducer(persistConfig, loginReducer.auth),
+  error: loginReducer.error,
   requests: requestsReducer.requests,
-
 });

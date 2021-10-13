@@ -2,9 +2,9 @@ import {put, call} from 'redux-saga/effects';
 import api from 'src/helpers/sendsay';
 
 import {ActionTypes} from 'src/store/constants';
-import {authenticateSuccess, authenticateFailure, SendsayLoginPayloadType} from 'src/store/actions/auth';
+import {authenticateSuccess, authenticateFailure, SendsayLoginPayloadType, logoutSuccess} from 'src/store/actions/auth';
 // @ts-ignore
-import { all, takeLatest } from 'redux-saga/effects';
+import {all, takeLatest} from 'redux-saga/effects';
 import {deleteCookie} from '../../helpers/cookieHelper';
 import {Action} from 'redux-actions';
 
@@ -13,15 +13,15 @@ export function* authenticateCheckSaga() {
     yield api.sendsay.request({
       action: 'pong',
     });
-  } catch (error) {
-    // @ts-ignore
-    if (error.id === 'error/auth/failed') {
+  } catch ({id}) {
+    if (id === 'error/auth/failed') {
       yield call(logoutSaga);
     }
   }
 }
 
 export function* authenticateSaga({payload}: Action<SendsayLoginPayloadType>) {
+  let authErrorMessage: string | null = null;
 
   yield api.sendsay
     .login({
@@ -30,13 +30,13 @@ export function* authenticateSaga({payload}: Action<SendsayLoginPayloadType>) {
       password: payload.password,
     })
     .catch((err: Error) => {
-      console.log('err', err)
+      authErrorMessage = JSON.stringify(err);
     });
 
   if (!api.sendsay.session) {
+    yield put(authenticateFailure({authErrorMessage}));
     yield call(logoutSaga);
-  }
-  else {
+  } else {
     document.cookie = `sendsay_session=${api.sendsay.session}`;
     yield put(
       authenticateSuccess({
@@ -49,14 +49,14 @@ export function* authenticateSaga({payload}: Action<SendsayLoginPayloadType>) {
 }
 
 export function* logoutSaga() {
-  deleteCookie("sendsay_session");
+  deleteCookie('sendsay_session');
   api.sendsay.session = null;
-  yield put(authenticateFailure());
+  yield put(logoutSuccess());
 }
 
 export default function* root() {
   yield all([
-    takeLatest(ActionTypes.AUTHENTICATE, authenticateSaga),
+    takeLatest(ActionTypes.LOGIN, authenticateSaga),
     takeLatest(ActionTypes.AUTHENTICATE_CHECK, authenticateCheckSaga),
     takeLatest(ActionTypes.LOGOUT, logoutSaga),
   ]);

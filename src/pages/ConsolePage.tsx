@@ -1,14 +1,9 @@
-import React, {useState} from 'react';
-import {useAppDispatch} from '../store';
-import {logout} from '../store/actions';
-import {useHistory} from 'react-router-dom';
+import React from 'react';
 import Header from 'src/components/Header';
 import styled from 'styled-components';
 import RequestHistory from '../components/RequestHistory';
 import Footer from '../components/Footer';
 import SplitPane from '../components/SplitPane';
-import {PanesDivider} from '../components/PanesDivider';
-import {sendRequest} from '../store/actions/requests';
 
 const Wrapper = styled.div`
   display: flex;
@@ -17,13 +12,12 @@ const Wrapper = styled.div`
 `;
 
 const ConsolePage = () => {
-
   return (
     <Wrapper>
       <Header />
       <RequestHistory />
       <SplitPane />
-      <Footer/>
+      <Footer />
     </Wrapper>
   );
 };

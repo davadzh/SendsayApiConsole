@@ -1,19 +1,25 @@
-import React from 'react';
-import {Switch, Route} from 'react-router-dom';
+import React, {useEffect} from 'react';
+import {Switch, Route, Redirect} from 'react-router-dom';
 
-import store, {persistor, useAppSelector} from 'src/store';
 import LoginPage from 'src/pages/LoginPage';
 import ConsolePage from './pages/ConsolePage';
-
+import {authenticateCheck} from './store/actions';
+import {useAppDispatch, useAppSelector} from './store';
 
 function App() {
-  const isLoggedIn = useAppSelector(state => !!state.auth.sessionKey?.length)
+  const dispatch = useAppDispatch();
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
+
+  useEffect(() => {
+    dispatch(authenticateCheck());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Switch>
-      <Route path='/' exact render={() => <LoginPage />} />
-      {isLoggedIn && <Route path='/console' exact render={() => <ConsolePage />} />}
-      {/*TODO редирект на авторизацию*/}
+      <Route path="/" exact render={() => <LoginPage />} />
+      {isLoggedIn && <Route path="/console" exact render={() => <ConsolePage />} />}
+      <Route path="*" render={() => <Redirect to={'/'} />} />
     </Switch>
   );
 }

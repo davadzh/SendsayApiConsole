@@ -1,14 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import {withRouter, useHistory} from 'react-router-dom';
+import React, {useEffect} from 'react';
+import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 
-import {useAppDispatch, useAppSelector} from '../store';
-import {authenticate} from 'src/store/actions';
-import BlueButton from '../components/BlueButton';
-import Input from '../components/Input';
+import {useAppSelector} from '../store';
 import AuthForm from '../components/AuthForm';
-
-
 
 const Wrapper = styled.div`
   height: 100%;
@@ -16,9 +11,8 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background: #F7F7F7;
+  background: #f7f7f7;
 `;
-
 
 const LogoStyled = styled.img`
   margin-bottom: 20px;
@@ -27,21 +21,21 @@ const LogoStyled = styled.img`
 const LoginPage = () => {
   const history = useHistory();
 
-  const isLoading = useAppSelector(state => state.auth.loading);
-  const isLoggedIn = useAppSelector(state => !!state.auth.sessionKey?.length);
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
 
   useEffect(() => {
     if (isLoggedIn) {
       history.push('/console');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn]);
 
   return (
     <Wrapper>
-      <LogoStyled src='/icons/logo.svg' alt='' />
-      <AuthForm isLoading={isLoading}/>
+      <LogoStyled src="/icons/logo.svg" alt="" />
+      <AuthForm />
     </Wrapper>
   );
-}
+};
 
 export default LoginPage;

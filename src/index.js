@@ -11,7 +11,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router basename="/api-console/">
+    <Router basename="/api-console">
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <App />

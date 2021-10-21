@@ -17,9 +17,9 @@ function App() {
 
   return (
     <Switch>
-      <Route path="/" exact render={() => <LoginPage />} />
-      {isLoggedIn && <Route path="/console" exact render={() => <ConsolePage />} />}
-      <Route path="*" render={() => <Redirect to={'/'} />} />
+      <Route path="/login" render={() => <LoginPage />} />
+      {isLoggedIn && <Route path="/console" render={() => <ConsolePage />} />}
+      <Route path="*" render={() => <Redirect to={'/login'} />} />
     </Switch>
   );
 }

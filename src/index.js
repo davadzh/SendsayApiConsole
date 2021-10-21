@@ -6,18 +6,18 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {Provider} from 'react-redux';
 import store, {persistor} from './store';
-import {HashRouter as Router} from 'react-router-dom';
+import {HashRouter} from 'react-router-dom';
 import {PersistGate} from 'redux-persist/integration/react';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router basename="/api-console">
+    <HashRouter>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <App />
         </PersistGate>
       </Provider>
-    </Router>
+    </HashRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

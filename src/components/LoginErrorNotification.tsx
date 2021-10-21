@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import failureFace from '../media/icons/failure-face.svg';
 import {useAppSelector} from '../store';
+import {Colors} from '../helpers/constants/styleConstants';
+import {staticTexts} from '../helpers/constants/namingConstants';
 
 const LoginErrorNotificationStyled = styled.div`
   background: rgba(207, 44, 0, 0.1);
@@ -24,7 +26,7 @@ const FailureTextWrapper = styled.div`
   & > h2 {
     margin: 0;
     display: block;
-    color: #cf2c00;
+    color: ${Colors.errorRed};
     font-weight: normal;
     font-size: 18px;
     line-height: 30px;
@@ -33,7 +35,7 @@ const FailureTextWrapper = styled.div`
   & > p {
     margin: 0;
     display: block;
-    color: #cf2c00;
+    color: ${Colors.errorRed};
     opacity: 0.5;
     font-size: 12px;
     word-break: break-all;
@@ -41,18 +43,18 @@ const FailureTextWrapper = styled.div`
   }
 `;
 
-const LoginErrorNotification = () => {
+const LoginErrorNotification = React.memo(() => {
   const errorMessage = useAppSelector((state) => state.error.authErrorMessage);
 
   return (
     <LoginErrorNotificationStyled>
       <img src={failureFace} alt="" />
       <FailureTextWrapper>
-        <h2>Вход не вышел</h2>
+        <h2>{staticTexts.LOGIN_FAILURE}</h2>
         <p>{errorMessage}</p>
       </FailureTextWrapper>
     </LoginErrorNotificationStyled>
   );
-};
+});
 
 export default LoginErrorNotification;

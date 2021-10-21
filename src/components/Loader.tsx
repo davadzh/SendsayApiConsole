@@ -17,7 +17,6 @@ const LoaderStyled = styled.img`
 `;
 
 const Loader = () => {
-  //TODO переделать в svg
   return <LoaderStyled src={loader} alt="Loading" />;
 };
 

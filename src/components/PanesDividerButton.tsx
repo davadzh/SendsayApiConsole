@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components';
 import {SplitPaneContext} from './SplitPane';
+import {ReactComponent as DividerIcon} from '../media/icons/dots.svg';
 
 const PanesDividerButtonStyled = styled.button`
   border: none;
@@ -10,6 +11,21 @@ const PanesDividerButtonStyled = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  & > svg {
+    min-width: 10px;
+    circle {
+      transition: 0.2s ease;
+    }
+  }
+
+  &:hover {
+    & > svg {
+      circle {
+        fill-opacity: 0.3;
+      }
+    }
+  }
 `;
 
 export const PanesDividerButton = () => {
@@ -17,8 +33,7 @@ export const PanesDividerButton = () => {
 
   return (
     <PanesDividerButtonStyled onMouseDown={onMouseHoldDown}>
-      {/*//TODO переделать в svg*/}
-      <img src="/icons/dots.svg" alt="" draggable={false} />
+      <DividerIcon />
     </PanesDividerButtonStyled>
   );
 };

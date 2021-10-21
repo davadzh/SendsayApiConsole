@@ -1,13 +1,14 @@
 import React, {ReactNode} from 'react';
 import Loader from './Loader';
 import styled from 'styled-components';
+import {Colors} from '../helpers/constants/styleConstants';
 
 type BlueButtonStyledProps = {
   isDisabled: boolean;
 };
 
 const BlueButtonStyled = styled.button<BlueButtonStyledProps>`
-  background: linear-gradient(180deg, #45a6ff 0%, #0055fb 100%), #c4c4c4;
+  background: linear-gradient(180deg, ${Colors.lightBlue} 0%, ${Colors.blue} 100%), ${Colors.lightGray};
   padding: 5px 10px;
   border: none;
   border-radius: 5px;
@@ -26,12 +27,12 @@ const BlueButtonStyled = styled.button<BlueButtonStyledProps>`
     }
 
     &:focus {
-      border: 2px solid #45a5ff;
+      border: 2px solid ${Colors.lightBlue};
     }
 
     &:active {
-      background: linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), linear-gradient(180deg, #45a6ff 0%, #0055fb 100%),
-        #c4c4c4;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),
+        linear-gradient(180deg, ${Colors.lightBlue} 0%, ${Colors.blue} 100%), ${Colors.lightGray};
     }
 
     & > span {
@@ -44,7 +45,7 @@ const BlueButtonStyled = styled.button<BlueButtonStyledProps>`
   }
 
   &:disabled {
-    background: #c4c4c4;
+    background: ${Colors.lightGray};
     cursor: default;
   }
 `;
@@ -57,12 +58,12 @@ type BlueButtonPropsType = {
   clickHandler?: () => void;
 };
 
-const BlueButton = ({isLoading, isDisabled, type, children, clickHandler}: BlueButtonPropsType) => {
+const BlueButton = React.memo(({isLoading, isDisabled, type, children, clickHandler}: BlueButtonPropsType) => {
   return (
     <BlueButtonStyled isDisabled={isDisabled} onClick={clickHandler} type={type} disabled={isDisabled}>
       <span>{isLoading ? <Loader /> : children}</span>
     </BlueButtonStyled>
   );
-};
+});
 
 export default BlueButton;

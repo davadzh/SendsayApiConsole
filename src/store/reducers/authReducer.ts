@@ -14,7 +14,7 @@ type ErrorStateType = {
   authErrorMessage?: string | null;
 };
 
-//TODO Убрать isLoggedIn из персистора
+//TODO Убрать isLoggedIn, isLoading из персистора
 const authInitialState: AuthStateType = {
   isLoading: false,
   isLoggedIn: false,
@@ -64,6 +64,12 @@ export default {
         return {
           ...state,
           authErrorMessage: payload.authErrorMessage,
+        };
+      },
+      [ActionTypes.AUTHENTICATE_SUCCESS]: (state) => {
+        return {
+          ...state,
+          authErrorMessage: null,
         };
       },
     },

@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import {useAppDispatch, useAppSelector} from '../store';
 import {setCurrentRequest} from '../store/actions';
 import {SplitPaneContext} from './SplitPane';
+import {BoxShadows, Colors} from '../helpers/constants/styleConstants';
+import {staticTexts} from '../helpers/constants/namingConstants';
 
 const LeftPaneStyled = styled.div`
   max-width: calc(100% - 410px);
@@ -16,9 +18,9 @@ type RequestWrapperPropsType = {
 
 const RequestWrapper = styled.textarea<RequestWrapperPropsType>`
   resize: none;
-  border: 1px solid ${(props) => (props.hasError ? '#CF2C00' : 'rgba(0, 0, 0, 0.2)')};
-  box-shadow: ${(props) => (props.hasError ? '0px 0px 5px rgba(207, 44, 0, 0.5)' : 'none')};
-  //TODO из-за анимации поля ввода при перетаскивании начинают "плыть"
+  border: 1px solid ${(props) => (props.hasError ? Colors.errorRed : Colors.translucentBlack)};
+  box-shadow: ${(props) => (props.hasError ? BoxShadows.default : 'none')};
+  //TODO wrapper is getting jelly effect because of transition
   //transition-property: border, box-shadow;
   //transition: all 0.2s ease;
   box-sizing: border-box;
@@ -35,7 +37,7 @@ type WindowNamePropsType = {
 };
 
 const WindowName = styled.label<WindowNamePropsType>`
-  color: ${(props) => (props.hasError ? '#CF2C00' : '#999999')};
+  color: ${(props) => (props.hasError ? Colors.errorRed : Colors.gray)};
   transition: color 0.2s ease;
   height: 20px;
   display: flex;
@@ -47,13 +49,12 @@ type LeftPanePropsType = {
   setLeftPaneWidth: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const LeftPane = ({setLeftPaneWidth}: LeftPanePropsType) => {
+export const LeftPane = React.memo(({setLeftPaneWidth}: LeftPanePropsType) => {
   const dispatch = useAppDispatch();
   const leftPaneRef = createRef<HTMLTextAreaElement>();
   const {clientWidth, setClientWidth} = useContext(SplitPaneContext);
 
-  const currentRequestValue = useAppSelector((state) => state.requests.currentRequest);
-  const hasRequestSyntaxError = useAppSelector((state) => state.requests.hasRequestSyntaxError);
+  const {currentRequest, hasRequestSyntaxError} = useAppSelector((state) => state.requests);
 
   useEffect(() => {
     if (leftPaneRef?.current) {
@@ -70,13 +71,13 @@ export const LeftPane = ({setLeftPaneWidth}: LeftPanePropsType) => {
 
   return (
     <LeftPaneStyled>
-      <WindowName hasError={hasRequestSyntaxError}>Запрос:</WindowName>
+      <WindowName hasError={hasRequestSyntaxError}>{staticTexts.REQUEST}</WindowName>
       <RequestWrapper
         ref={leftPaneRef}
-        value={currentRequestValue}
+        value={currentRequest}
         onChange={(e) => dispatch(setCurrentRequest({currentRequest: e.target.value}))}
         hasError={hasRequestSyntaxError}
       />
     </LeftPaneStyled>
   );
-};
+});

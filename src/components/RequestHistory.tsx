@@ -3,10 +3,12 @@ import styled from 'styled-components';
 import SavedRequest from './SavedRequest';
 import {useAppDispatch, useAppSelector} from '../store';
 import {clearRequests} from '../store/actions';
+import {ReactComponent as ClearRequestsIcon} from '../media/icons/cross.svg';
+import {Colors} from '../helpers/constants/styleConstants';
 
 const RequestHistoryStyled = styled.div`
   height: 50px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid ${Colors.translucentBlack};
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -38,10 +40,24 @@ const ClearRequestsButton = styled.button`
   border: none;
   z-index: 2;
   min-width: 50px;
-  border-left: 1px solid rgba(0, 0, 0, 0.2);
+  border-left: 1px solid ${Colors.translucentBlack};
   display: flex;
   align-items: center;
   justify-content: center;
+
+  & > svg {
+    path {
+      transition: 0.2s ease;
+    }
+  }
+
+  &:hover {
+    & > svg {
+      path {
+        stroke: ${Colors.blue};
+      }
+    }
+  }
 `;
 
 const ClearRequestsGradient = styled.div`
@@ -70,8 +86,7 @@ const RequestHistory = () => {
       <ClearRequests>
         <ClearRequestsGradient />
         <ClearRequestsButton onClick={() => dispatch(clearRequests())}>
-          {/*//TODO переделать в svg*/}
-          <img src="/icons/cross.svg" alt="" />
+          <ClearRequestsIcon />
         </ClearRequestsButton>
       </ClearRequests>
     </RequestHistoryStyled>

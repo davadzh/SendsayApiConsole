@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import {useAppDispatch} from '../store';
 import {setCurrentRequest} from '../store/actions';
+import {ReactComponent as DotsIcon} from '../media/icons/dots.svg';
+import {Colors} from '../helpers/constants/styleConstants';
 
 const WrapperButton = styled.button`
   height: 30px;
@@ -15,6 +17,11 @@ const WrapperButton = styled.button`
   border: none;
   cursor: pointer;
   margin-right: 10px;
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  }
 `;
 
 type StatusCirclePropsType = {
@@ -24,8 +31,8 @@ type StatusCirclePropsType = {
 const StatusCircle = styled.div<StatusCirclePropsType>`
   height: 10px;
   width: 10px;
-  background: ${(props) => (props.hasError ? '#CF2C00' : '#30B800')};
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: ${(props) => (props.hasError ? Colors.errorRed : '#30B800')};
+  border: 1px solid ${Colors.translucentBlack};
   border-radius: 50px;
   box-sizing: border-box;
 `;
@@ -67,8 +74,7 @@ const SavedRequest = ({actionName, hasError, requestText}: SavedRequestPropsType
       <StatusCircle hasError={hasError} />
       <Title>{actionName}</Title>
       <Details>
-        {/*//TODO переделать в svg*/}
-        <img src="/icons/dots.svg" alt="" />
+        <DotsIcon />
       </Details>
     </WrapperButton>
   );

@@ -3,23 +3,26 @@ import styled from 'styled-components';
 import {useAppDispatch} from '../store';
 import {useHistory} from 'react-router-dom';
 import {logout} from 'src/store/actions/auth';
+import {ReactComponent as ExitIcon} from '../media/icons/log-out.svg';
+import {ReactComponent as LogoIcon} from '../media/icons/logo.svg';
+import {ReactComponent as FullScreenIcon} from '../media/icons/full-screen.svg';
+import {ReactComponent as FullScreenEnabledIcon} from '../media/icons/full-screen-enabled.svg';
+import {FullScreenHandle} from 'react-full-screen';
+import {Colors} from '../helpers/constants/styleConstants';
+import {staticTexts} from '../helpers/constants/namingConstants';
 
 const HeaderStyled = styled.div`
   padding: 10px 15px;
   height: 50px;
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-`;
-
-const Logo = styled.img`
-  margin-right: 20px;
+  border-bottom: 1px solid ${Colors.translucentBlack};
 `;
 
 const Title = styled.h1`
   font-size: 20px;
   display: flex;
-  margin: 0;
+  margin: 0 0 0 20px;
   line-height: 30px;
   font-weight: normal;
 `;
@@ -34,13 +37,13 @@ const NavPanel = styled.div`
 `;
 
 const UserInfo = styled.div`
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid ${Colors.lightGray};
   margin-right: 30px;
   padding: 5px 15px;
   border-radius: 5px;
 
   & > span {
-    color: rgba(0, 0, 0, 0.2);
+    color: ${Colors.almostBlack};
   }
 `;
 
@@ -55,7 +58,9 @@ const ExitButton = styled.button`
   height: 30px;
 
   & > svg {
-    transition: 0.2s ease;
+    path {
+      transition: 0.2s ease;
+    }
   }
 
   & > div {
@@ -64,21 +69,20 @@ const ExitButton = styled.button`
 
   &:hover {
     & > svg {
-      fill: #0055fb;
+      path {
+        stroke: ${Colors.blue};
+      }
     }
 
     & > div {
-      color: #0055fb;
+      color: ${Colors.blue};
     }
   }
 `;
 
 const ExitText = styled.div`
   font-size: 16px;
-`;
-
-const ExitIcon = styled.img`
-  margin-left: 8px;
+  margin-right: 8px;
 `;
 
 const FullScreenButton = styled.button`
@@ -91,17 +95,25 @@ const FullScreenButton = styled.button`
   align-items: center;
 
   & > svg {
-    transition: 0.2s ease;
+    path {
+      transition: 0.2s ease;
+    }
   }
 
   &:hover {
     & > svg {
-      fill: #0055fb;
+      path {
+        stroke: ${Colors.blue};
+      }
     }
   }
 `;
 
-const Header = () => {
+type HeaderPropsType = {
+  fullScreenHandler: FullScreenHandle;
+};
+
+const Header = ({fullScreenHandler}: HeaderPropsType) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
@@ -110,27 +122,34 @@ const Header = () => {
     history.push('/');
   };
 
+  const changeFullScreenStatus = async () => {
+    if (fullScreenHandler.active) {
+      await fullScreenHandler.exit();
+    } else {
+      await fullScreenHandler.enter();
+    }
+  };
+
   return (
     <HeaderStyled>
       <LogoPart>
-        <Logo src="/icons/logo.svg" alt="" />
-        <Title>API-консолька</Title>
+        <LogoIcon />
+        <Title>{staticTexts.API_CONSOLE}</Title>
       </LogoPart>
 
       <NavPanel>
+        {/*TODO use real user data*/}
         <UserInfo>
           email <span>:</span> sublogin
         </UserInfo>
 
         <ExitButton onClick={onExit}>
-          <ExitText>Выйти</ExitText>
-          {/*TODO сделать svg*/}
-          <ExitIcon src="/icons/log-out.svg" alt="" />
+          <ExitText>{staticTexts.EXIT}</ExitText>
+          <ExitIcon />
         </ExitButton>
 
-        <FullScreenButton>
-          {/*TODO сделать svg*/}
-          <img src="/icons/full-screen.svg" alt="" />
+        <FullScreenButton onClick={changeFullScreenStatus}>
+          {fullScreenHandler.active ? <FullScreenEnabledIcon /> : <FullScreenIcon />}
         </FullScreenButton>
       </NavPanel>
     </HeaderStyled>

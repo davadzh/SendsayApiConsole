@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import RequestHistory from '../components/RequestHistory';
 import Footer from '../components/Footer';
 import SplitPane from '../components/SplitPane';
+import {FullScreen, useFullScreenHandle} from 'react-full-screen';
 
 const Wrapper = styled.div`
   display: flex;
@@ -12,13 +13,17 @@ const Wrapper = styled.div`
 `;
 
 const ConsolePage = () => {
+  const handle = useFullScreenHandle();
+
   return (
-    <Wrapper>
-      <Header />
-      <RequestHistory />
-      <SplitPane />
-      <Footer />
-    </Wrapper>
+    <FullScreen handle={handle} className={'fullscreen-custom'}>
+      <Wrapper>
+        <Header fullScreenHandler={handle} />
+        <RequestHistory />
+        <SplitPane />
+        <Footer />
+      </Wrapper>
+    </FullScreen>
   );
 };
 

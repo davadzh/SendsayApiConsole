@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import {login} from '../store/actions';
 import {useAppDispatch, useAppSelector} from '../store';
 import LoginErrorNotification from './LoginErrorNotification';
+import {Colors} from '../helpers/constants/styleConstants';
+import {staticTexts} from '../helpers/constants/namingConstants';
 
 const Form = styled.form`
   max-width: 520px;
@@ -17,7 +19,7 @@ const Form = styled.form`
 `;
 
 const Title = styled.h1`
-  color: #0d0d0d;
+  color: ${Colors.almostBlack};
   font-size: 24px;
   font-weight: normal;
   margin-top: 0;
@@ -33,6 +35,7 @@ const validationSchema = yup.object({
 const AuthForm = () => {
   const dispatch = useAppDispatch();
 
+  //TODO использовать 1 селектор после того, как вынесу isLoading из персистора
   const isLoading = useAppSelector((state) => state.auth.isLoading);
   const errorMessage = useAppSelector((state) => state.error.authErrorMessage);
 
@@ -56,7 +59,7 @@ const AuthForm = () => {
 
   return (
     <Form onSubmit={formik.handleSubmit}>
-      <Title>API-консолька</Title>
+      <Title>{staticTexts.API_CONSOLE}</Title>
       {errorMessage && <LoginErrorNotification />}
       <Input
         type={'email'}
@@ -91,7 +94,7 @@ const AuthForm = () => {
         isDisabled={formik.values.login.length === 0 || formik.values.password.length === 0}
         isLoading={isLoading}
       >
-        Войти
+        {staticTexts.LOGIN}
       </BlueButton>
     </Form>
   );
